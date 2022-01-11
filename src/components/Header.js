@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { auth, provider, signInWithPopup } from "../firebase";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   selectUserName,
   selectUserPhoto,
@@ -31,7 +31,7 @@ const Header = (props) => {
     if (!userName) {
       signInWithPopup(auth, provider)
         .then((result) => {
-          console.log(result.user);
+          console.log(result.user.photoURL);
           setUser(result.user);
         })
         .catch((error) => {
@@ -71,10 +71,10 @@ const Header = (props) => {
       ) : (
         <>
           <NavMenu>
-            <a href="/home">
+            <Link to="/home">
               <img src="/images/home-icon.svg" alt="HOME" />
               <span>HOME</span>
-            </a>
+            </Link>
             <a>
               <img src="/images/search-icon.svg" alt="SEARCH" />
               <span>SEARCH</span>
