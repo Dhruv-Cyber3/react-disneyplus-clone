@@ -1,25 +1,61 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import db from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const Detail = (props) => {
+  const { id } = useParams();
+  const [detailData, setDetailData] = useState({});
+
+  const getMovie = async () => {
+    const docRef = doc(db, "movies", id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      // console.log(docSnap.data());
+      setDetailData(docSnap.data());
+    } else {
+      console.log("no document");
+    }
+  };
+
+  useEffect(() => {
+    getMovie();
+  }, [id]);
+
   return (
     <Container>
       <Background>
-        <img
-          src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/456A711C19899C881600F6247705E5253EB18C2471D75E5281E1FF6ACB6D2FBA/scale?width=1440&aspectRatio=1.78&format=jpeg"
-          alt=""
-        />
+        <img src={detailData.backgroundImg} alt={detailData.title} />
       </Background>
       <ImageTitle>
-        <img
-          alt=""
-          src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/4A67A42FB16607DAE7E22266D3F00181965178ED1884047C2D982EE7D89D3554/scale?width=1440&aspectRatio=1.78"
-        />
+        <img alt={detailData.title} src={detailData.titleImg} />
       </ImageTitle>
-      <Content>
-        <Controls>Controls</Controls>
-      </Content>
+      <ContentMeta>
+        <Controls>
+          <Player>
+            <img src="/images/play-icon-black.png" alt="" />
+            <span>Play</span>
+          </Player>
+          <Trailer>
+            <img src="/images/play-icon-white.png" alt="" />
+            <span>Trailer</span>
+          </Trailer>
+          <AddList>
+            <span />
+            <span />
+          </AddList>
+          <GroupWatch>
+            <div>
+              <img src="/images/group-icon.png" alt="" />
+            </div>
+          </GroupWatch>
+        </Controls>
+
+        <SubTitle>{detailData.subTitle}</SubTitle>
+        <Description>{detailData.description}</Description>
+      </ContentMeta>
     </Container>
   );
 };
@@ -67,8 +103,133 @@ const ImageTitle = styled.div`
   }
 `;
 
-const Content = styled.div``;
+const ContentMeta = styled.div`
+  max-width: 874px;
+`;
 
-const Controls = styled.div``;
+const Controls = styled.div`
+  align-items: center;
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 24px 0px;
+  min-height: 56px;
+`;
+
+const Player = styled.button`
+  font-size: 15px;
+  margin: 0px 22px 0px 0px;
+  padding: 0px 24px;
+  height: 56px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 1.8px;
+  text-align: center;
+  text-transform: uppercase;
+
+  background: rgb(249, 249, 249);
+  border: none;
+  color: rgb(0, 0, 0);
+
+  img {
+    width: 32px;
+  }
+
+  &:hover {
+    background: rgb(198, 198, 198);
+  }
+
+  @media (max-width: 768px) {
+    height: 45px;
+    padding: 0px 22px;
+    font-size: 12px;
+    margin: 0px 10px 0px 0px;
+
+    img {
+      width: 25px;
+    }
+  }
+`;
+
+const Trailer = styled(Player)`
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgb(249, 249, 249);
+  color: rgb(249, 249, 249);
+`;
+
+const AddList = styled.div`
+  margin-right: 16px;
+  height: 44px;
+  width: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+
+  span {
+    background-color: rgb(249, 249, 249);
+    display: inline-block;
+
+    &:first-child {
+      height: 2px;
+      transform: translate(1px, 0px) rotate(0deg);
+      width: 16px;
+    }
+
+    &:nth-child(2) {
+      height: 16px;
+      transform: translateX(-8px) rotate(0deg);
+      width: 2px;
+    }
+  }
+`;
+
+const GroupWatch = styled.div`
+  height: 44px;
+  width: 44px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: white;
+
+  div {
+    height: 40px;
+    width: 40px;
+    background: rgb(0, 0, 0);
+    border-radius: 50%;
+
+    img {
+      width: 100%;
+    }
+  }
+`;
+
+const SubTitle = styled.div`
+  color: rgb(249, 249, 249);
+  font-size: 15px;
+  min-height: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+`;
+
+const Description = styled.div`
+  line-height: 1.4;
+  font-size: 20px;
+  padding: 16px 0px;
+  color: rgb(249, 249, 249);
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
 
 export default Detail;
