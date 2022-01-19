@@ -11,12 +11,13 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBN6LF1rdsJrRTMsQaVVgQbOi3CuXbgOlo",
+  apiKey: "AIzaSyBN6LF1rdsJrRTMsQaVVgQbOi3Cu",
   authDomain: "disney-clone-react-103c5.firebaseapp.com",
   projectId: "disney-clone-react-103c5",
   storageBucket: "disney-clone-react-103c5.appspot.com",
-  messagingSenderId: "771182203077",
-  appId: "1:771182203077:web:b473d6a535f7a6b0fd20ac",
+  messagingSenderId: "7711822",
+  appId: "1:771182203077:web:b473d6a535f7",
+  endAPI:"XbgOlo03077a6b0fd20ac",
 };
 
 // Initialize Firebase
